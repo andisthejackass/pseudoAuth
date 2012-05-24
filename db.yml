@@ -1,5 +1,2 @@
-adapter:  mysql2
-database: pseudoauth
-username: root
-password: toor
-host:     localhost
+adapter: sqlite3
+database: users.db

@@ -8,7 +8,7 @@ require_relative 'active_record_init.rb'
 puts User.first.username
 
 puts "Starting up server..."
-server = TCPServer.new(2008)
+server = TCPServer.new(1337)
 while (session = server.accept)
  Thread.start do
    puts "log: Connection from #{session.peeraddr[2]} at
