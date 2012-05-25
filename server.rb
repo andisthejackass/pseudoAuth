@@ -1,4 +1,5 @@
 require 'socket'
+require 'openssl'
 require 'rubygems'
 require 'active_record'
 require 'yaml'
@@ -18,7 +19,10 @@ while (session = server.accept)
     else
       puts "user: " + user.username
       pub = user.pub
-      puts pub
+      random = rand(100)
+      puts random
+      challenge = Base64.encode64(pub.public_encrypt(random))
+      puts challenge
     end
     session.puts "Server: Goodbye\n"
   end
