@@ -1,11 +1,12 @@
 require 'socket'
 require 'openssl'
+require 'base64'
 require 'rubygems'
 require 'active_record'
 require 'yaml'
 require_relative 'active_record_init.rb'
 
-puts "Starting up server..."
+puts "Server started ..."
 server = TCPServer.new(1337)
 while (session = server.accept)
   Thread.start do
@@ -18,10 +19,10 @@ while (session = server.accept)
       puts "User could not be found."
     else
       puts "user: " + user.username
-      pub = user.pub
+      pub = OpenSSL::PKey::RSA.new(user.pub)
       random = rand(100)
       puts random
-      challenge = Base64.encode64(pub.public_encrypt(random))
+      challenge = Base64.encode64(pub.public_encrypt(random.to_s))
       puts challenge
     end
     session.puts "Server: Goodbye\n"
