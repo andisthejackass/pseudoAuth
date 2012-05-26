@@ -11,8 +11,11 @@ cipher = Base64.encode64(Digest::SHA256.new.digest user)
 clientSession = TCPSocket.new( "localhost", 1337 )
 clientSession.puts cipher
   while !(clientSession.closed?) && (serverMessage = clientSession.gets)
-    puts serverMessage
-    if serverMessage.include?("Goodbye")
+    response = serverMessage
+    if response.include?("CHALLENGE: ")
+      puts "Challenge Accepted!"
+    end
+    if response.include?("Goodbye")
       puts "log: closing connection"
       clientSession.close
     end

@@ -21,8 +21,8 @@ while (session = server.accept)
       puts "user: " + user.username
       pub = OpenSSL::PKey::RSA.new(user.pub)
       random = rand(100)
-      puts random
       challenge = Base64.encode64(pub.public_encrypt(random.to_s))
+      session.puts "CHALLENGE: " + challenge
       puts challenge
     end
     session.puts "Server: Goodbye\n"
