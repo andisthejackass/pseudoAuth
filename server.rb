@@ -33,6 +33,7 @@ while (session = server.accept)
         auth_msg = "User Authenticated.\n"
         puts auth_msg
         session.puts auth_msg
+        system("echo 'User #{user.username.gsub("\n", "")} authenticated at #{Time.now}' >> log.txt")
       else
         no_auth_msg = "Could not authenticate.\n"
         puts no_auth_msg
