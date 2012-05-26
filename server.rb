@@ -10,7 +10,6 @@ puts "Server started ..."
 server = TCPServer.new(1337)
 while (session = server.accept)
   Thread.start do
-    #puts "log: Connection from #{session.peeraddr[2]} at #{session.peeraddr[3]}"
     #Get encrypted username
     input = session.gets
     #Search in DB for username
@@ -19,11 +18,16 @@ while (session = server.accept)
       puts "User could not be found."
     else
       puts "user: " + user.username
+      # Get user's public key from DB
       pub = OpenSSL::PKey::RSA.new(user.pub)
       random = rand(100)
+      # Encrypt random challenge with user's public key
       challenge = Base64.encode64(pub.public_encrypt(random.to_s)).gsub("\n", "___")
+      # Sends challenge message
       session.puts "CHALLENGE: " + challenge
+      # Get proof message
       proof = session.gets
+      # Hash the random value from before
       hash = Base64.encode64(Digest::SHA256.new.digest random.to_s)
       if proof == hash
         auth_msg = "User Authenticated.\n"
